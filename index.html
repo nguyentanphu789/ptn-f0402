@@ -218,10 +218,10 @@
   var F = 'https://docs.google.com/forms/d/e/';
   var FORMS = [
     { id: 1, dev: '1908592538', title: 'Mượn phòng, thiết bị – dụng cụ trong ngày',
-      url: F + '1FAIpQLSeO6leFvUtaNOmPem4dDr8MeWqPUhvHsCvYDntLATsdY9mnbQ/viewform',
+      url: 'https://script.google.com/macros/s/AKfycbw7xr0ikGj-aafrPMUMieKKSso0yQz8GYF4487VThtqGvpZJySoAxgsXGOTIfQ6xHPL/exec', direct: true,
       map: function (p) { return { 303998103: p.name, 1045781291: p.role === 'SV' ? p.gvhd : '', 1166974658: p.phone, 1908592538: dev(p) }; } },
     { id: 2, dev: '442033899', title: 'Mượn thiết bị từ 02 ngày trở lên',
-      url: F + '1FAIpQLSdh5ARrU7e70mc7NNPQr8vGyqbk_gXxlrPlpZKKUxCpw-qp6w/viewform', email: true,
+      url: 'https://script.google.com/macros/s/AKfycbyHs2ecT1wLdvH2IZXj1VMA0NLD5vnOoIgYOQl24sczwZwu5FzCbPzqm4xvlKnUpUw/exec', direct: true,
       map: function (p) {
         var sv = p.role === 'SV';
         return { 377003132: sv ? p.gvhd : p.name, 2007608080: sv ? p.name : '', 577451619: sv ? p.lop : 'GV', 1866369065: p.phone, 442033899: dev(p) };
@@ -288,7 +288,7 @@
     }
     $('grid').innerHTML = FORMS.map(function (f) {
       return '<button type="button" class="qr" data-id="' + f.id + '"><span class="chip">QR' + f.id + '</span>' +
-        '<span class="t">' + esc(f.title) + '</span>' + (f.external ? '<span class="ext">Mở bằng trình duyệt (cần đăng nhập Google)</span>' : '') + '</button>';
+        '<span class="t">' + esc(f.title) + '</span>' + (f.external ? '<span class="ext">Mở bằng trình duyệt (cần đăng nhập Google)</span>' : (f.direct ? '<span class="ext">Mở đúng biểu mẫu như mã QR in</span>' : '')) + '</button>';
     }).join('');
   }
 
@@ -342,6 +342,7 @@
   var current = null;
   function openForm(id, skipCheck) {
     var f = FORMS.filter(function (x) { return x.id === id; })[0]; if (!f) return;
+    if (f.direct) { window.location.href = f.url; return; }
     var p = profile();
     if (!p && !skipCheck) {
       ask('Chưa có thông tin người đăng ký', 'Nhập thông tin một lần để app tự điền vào biểu mẫu. Bạn cũng có thể mở biểu mẫu và tự điền tay.',
