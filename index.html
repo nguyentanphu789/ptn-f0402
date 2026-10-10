@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cổng PTN F04.02</title>
+<meta name="description" content="Đăng ký nhanh QR1 – QR7 của Phòng thí nghiệm F04.02, Viện Công nghệ Sinh học và Thực phẩm, IUH.">
+<meta name="theme-color" content="#253f93">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="favicon-64.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PTN F04.02">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#253f93; --navy-ink:#ffffff; --gold:#f0bf4c;
+    --bg:#f2f4f9; --card:#ffffff; --ink:#151b33; --muted:#5c6480; --line:#e1e5f0;
+    --ok:#1f7a4d; --danger:#b42318; --chip:#253f93;
+    --top: env(safe-area-inset-top, 0px); --bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font-family:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  body{overscroll-behavior-y:none}
+  button,input,select{font:inherit;color:inherit}
+  .safe{height:var(--top);background:var(--navy)}
+  header.brand{background:#fff;padding:12px 16px;border-bottom:1px solid var(--line)}
+  header.brand img{display:block;height:44px;width:auto;max-width:100%}
+  .band{background:var(--navy);color:var(--navy-ink);text-align:center;font-size:14px;font-weight:500;padding:10px 16px;letter-spacing:.01em}
+  main{max-width:640px;margin:0 auto;padding:16px 16px calc(28px + var(--bottom))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px}
+  /* hồ sơ */
+  .me{display:flex;align-items:center;gap:14px;padding:14px 16px;margin-bottom:14px}
+  .avatar{width:48px;height:48px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px;flex:none}
+  .me .nm{font-weight:700;font-size:17px;line-height:1.3}
+  .me .sub{color:var(--muted);font-size:13.5px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .me .grow{flex:1;min-width:0}
+  .link{background:none;border:0;color:var(--navy);text-decoration:underline;text-underline-offset:3px;font-weight:500;padding:8px;cursor:pointer}
+  /* lưới QR */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .qr{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;padding:16px 14px;min-height:118px;cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:18px;transition:transform .08s ease,border-color .15s,box-shadow .15s}
+  .qr:active{transform:scale(.98)}
+  .qr:hover{border-color:var(--navy);box-shadow:0 2px 10px rgba(37,63,147,.08)}
+  .chip{background:var(--chip);color:#fff;font-weight:700;font-size:13px;padding:4px 10px;border-radius:8px;letter-spacing:.02em}
+  .qr .t{font-size:15.5px;line-height:1.35;font-weight:500}
+  .qr .ext{font-size:11.5px;color:var(--muted);margin-top:-4px}
+  .note{margin-top:16px;padding:14px 16px;color:var(--muted);font-size:13.5px;line-height:1.55}
+  .note b{color:var(--ink)}
+  .install{display:none;margin-top:12px;padding:12px 14px;align-items:center;gap:12px;font-size:13.5px}
+  .install.show{display:flex}
+  .install img{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);flex:none}
+  .btn{border:0;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer}
+  .btn.primary{background:var(--navy);color:#fff}
+  .btn.ghost{background:transparent;color:var(--navy)}
+  .btn.small{padding:8px 12px;font-size:13.5px;border-radius:10px}
+  /* màn hình hồ sơ */
+  .sheet{position:fixed;inset:0;background:var(--bg);z-index:30;overflow:auto;display:none}
+  .sheet.show{display:block}
+  .sheet .inner{max-width:560px;margin:0 auto;padding:18px 16px calc(28px + var(--bottom))}
+  h2{font-size:20px;margin:6px 0 4px}
+  .lead{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 16px}
+  label{display:block;font-size:13.5px;font-weight:600;margin:14px 0 6px}
+  label small{font-weight:400;color:var(--muted)}
+  input[type=text],input[type=email],input[type=tel]{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:16px}
+  input:focus{outline:2px solid var(--navy);outline-offset:0;border-color:transparent}
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#e7eaf3;padding:4px;border-radius:12px}
+  .seg button{border:0;background:transparent;padding:10px 6px;border-radius:9px;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer}
+  .seg button[aria-pressed=true]{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .err{color:var(--danger);font-size:12.5px;margin-top:6px;display:none}
+  .err.show{display:block}
+  .actions{display:flex;gap:10px;margin-top:22px}
+  .actions .btn{flex:1}
+  .devbox{margin-top:18px;font-size:13px;color:var(--muted);line-height:1.5}
+  /* màn hình form */
+  .viewer{position:fixed;inset:0;background:#fff;z-index:40;display:none;flex-direction:column}
+  .viewer.show{display:flex}
+  .bar{background:var(--navy);color:#fff;padding:calc(var(--top) + 6px) 8px 8px;display:flex;align-items:center;gap:6px}
+  .bar button{background:transparent;border:0;color:#fff;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:none}
+  .bar button:active{background:rgba(255,255,255,.15)}
+  .bar .ttl{flex:1;min-width:0;font-weight:600;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar .chip{background:var(--gold);color:var(--navy);margin-right:8px;display:inline-block;vertical-align:middle;line-height:1.3}
+  .prefill{background:#eef2ff;color:#2a3a7a;font-size:12.5px;padding:8px 14px;border-bottom:1px solid var(--line)}
+  .frame{flex:1;position:relative}
+  .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+  .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px;background:#fff}
+  .spin{width:34px;height:34px;border-radius:50%;border:3px solid #dfe4f3;border-top-color:var(--navy);animation:sp 0.8s linear infinite;margin:0 auto 10px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .toast{position:fixed;left:50%;bottom:calc(20px + var(--bottom));transform:translateX(-50%);background:#151b33;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+  .toast.show{opacity:1}
+  .modal{position:fixed;inset:0;background:rgba(15,20,40,.45);z-index:50;display:none;align-items:flex-end;justify-content:center}
+  .modal.show{display:flex}
+  .modal .box{background:#fff;border-radius:20px 20px 0 0;max-width:560px;width:100%;padding:20px 18px calc(18px + var(--bottom))}
+  .modal p{color:var(--muted);font-size:14px;line-height:1.55;margin:6px 0 0}
+  @media (min-width:700px){ .modal{align-items:center} .modal .box{border-radius:20px} }
+</style>
+</head>
+<body>
+<div class="safe"></div>
+<header class="brand"><img src="logo-vien.jpg" alt="Đại học Công nghiệp TP. Hồ Chí Minh – Viện Công nghệ Sinh học và Thực phẩm"></header>
+<div class="band">PTN F04.02 · Đăng ký nhanh QR1 – QR7</div>
+
+<main id="home">
+  <section class="card me" id="meCard" aria-live="polite">
+    <div class="avatar" id="avatar">?</div>
+    <div class="grow">
+      <div class="nm" id="meName">Chưa có thông tin</div>
+      <div class="sub" id="meSub">Nhập thông tin một lần để tự điền các biểu mẫu</div>
+    </div>
+    <button class="link" id="editBtn" type="button">Sửa</button>
+  </section>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="card install" id="installCard">
+    <img src="icon-192.png" alt="">
+    <div style="flex:1" id="installText">Cài app vào màn hình chính để mở nhanh, toàn màn hình.</div>
+    <button class="btn primary small" id="installBtn" type="button">Cài app</button>
+  </div>
+
+  <div class="card note">
+    Mã máy của bạn: <b id="devId">—</b> (được ghi kèm mỗi lần đăng ký).<br>
+    Thông tin cá nhân chỉ lưu trên máy này; đổi máy hoặc xóa dữ liệu trình duyệt thì nhập lại một lần.
+  </div>
+</main>
+
+<!-- Hồ sơ người đăng ký -->
+<section class="sheet" id="profile" aria-labelledby="pfTitle">
+  <div class="safe"></div>
+  <div class="inner">
+    <h2 id="pfTitle">Thông tin người đăng ký</h2>
+    <p class="lead">Nhập một lần, app sẽ tự điền vào các biểu mẫu QR1 – QR7. Ô nào biểu mẫu có mà ở đây không có, bạn điền tay trong biểu mẫu.</p>
+    <form id="pf" novalidate>
+      <label>Bạn là</label>
+      <div class="seg" role="group" aria-label="Vai trò">
+        <button type="button" data-role="SV" aria-pressed="true">Sinh viên</button>
+        <button type="button" data-role="GV" aria-pressed="false">Giảng viên</button>
+        <button type="button" data-role="NV" aria-pressed="false">Nhân viên</button>
+      </div>
+
+      <label for="f_name">Họ và tên *</label>
+      <input type="text" id="f_name" autocomplete="name" placeholder="Nguyễn Văn A">
+      <div class="err" data-for="f_name">Vui lòng nhập họ và tên.</div>
+
+      <label for="f_code"><span id="codeLbl">MSSV</span> *</label>
+      <input type="text" id="f_code" inputmode="numeric" autocomplete="off" placeholder="VD: 24752481">
+      <div class="err" data-for="f_code">Vui lòng nhập mã số.</div>
+
+      <label for="f_email">Email *</label>
+      <input type="email" id="f_email" autocomplete="email" placeholder="ten@gmail.com">
+      <div class="err" data-for="f_email">Email chưa đúng định dạng.</div>
+
+      <label for="f_phone">Số điện thoại * <small>(10 số, viết liền)</small></label>
+      <input type="tel" id="f_phone" inputmode="numeric" autocomplete="tel" placeholder="0901234567">
+      <div class="err" data-for="f_phone">Số điện thoại cần đủ 10 chữ số, bắt đầu bằng 0.</div>
+
+      <div id="svOnly">
+        <label for="f_lop">Lớp *</label>
+        <input type="text" id="f_lop" autocomplete="off" placeholder="VD: DHSH18A">
+        <div class="err" data-for="f_lop">Vui lòng nhập lớp.</div>
+        <label for="f_gvhd">Giảng viên hướng dẫn <small>(nếu có)</small></label>
+        <input type="text" id="f_gvhd" autocomplete="off" placeholder="VD: TS. Trần Thị B">
+      </div>
+      <div id="gvOnly" hidden>
+        <label for="f_unit">Bộ môn / Đơn vị <small>(không bắt buộc)</small></label>
+        <input type="text" id="f_unit" autocomplete="organization" placeholder="VD: Bộ môn Công nghệ Sinh học">
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" type="button" id="pfCancel">Để sau</button>
+        <button class="btn primary" type="submit">Lưu thông tin</button>
+      </div>
+      <div class="devbox">Mã máy: <b id="devId2">—</b>. Mã này được ghi kèm vào mỗi biểu mẫu để Phòng thí nghiệm nhận biết thiết bị đăng ký.</div>
+    </form>
+  </div>
+</section>
+
+<!-- Xem biểu mẫu trong app -->
+<section class="viewer" id="viewer" aria-modal="true" role="dialog" aria-labelledby="vTitle">
+  <div class="bar">
+    <button type="button" id="vBack" aria-label="Quay lại">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="ttl" id="vTitle"></div>
+    <button type="button" id="vReload" aria-label="Tải lại biểu mẫu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+    </button>
+  </div>
+  <div class="prefill" id="vPrefill"></div>
+  <div class="frame">
+    <div class="loading" id="vLoading"><div><div class="spin"></div>Đang mở biểu mẫu…</div></div>
+    <iframe id="vFrame" title="Biểu mẫu đăng ký" allow="clipboard-write"></iframe>
+  </div>
+</section>
+
+<!-- Hộp thông báo -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="box">
+    <h2 id="mTitle"></h2>
+    <p id="mText"></p>
+    <div class="actions">
+      <button class="btn ghost" type="button" id="mCancel">Đóng</button>
+      <button class="btn primary" type="button" id="mOk">Tiếp tục</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ===== Cấu hình 7 biểu mẫu (mã ô "entry" lấy từ Google Forms ngày 10/10/2026) ===== */
+  var F = 'https://docs.google.com/forms/d/e/';
+  var FORMS = [
+    { id: 1, dev: '1908592538', title: 'Mượn phòng, thiết bị – dụng cụ trong ngày',
+      url: F + '1FAIpQLSeO6leFvUtaNOmPem4dDr8MeWqPUhvHsCvYDntLATsdY9mnbQ/viewform',
+      map: function (p) { return { 303998103: p.name, 1045781291: p.role === 'SV' ? p.gvhd : '', 1166974658: p.phone, 1908592538: dev(p) }; } },
+    { id: 2, dev: '442033899', title: 'Mượn thiết bị từ 02 ngày trở lên',
+      url: F + '1FAIpQLSdh5ARrU7e70mc7NNPQr8vGyqbk_gXxlrPlpZKKUxCpw-qp6w/viewform', email: true,
+      map: function (p) {
+        var sv = p.role === 'SV';
+        return { 377003132: sv ? p.gvhd : p.name, 2007608080: sv ? p.name : '', 577451619: sv ? p.lop : 'GV', 1866369065: p.phone, 442033899: dev(p) };
+      } },
+    { id: 3, dev: '1197238647', title: 'Cấp hóa chất – vật tư tiêu hao',
+      url: F + '1FAIpQLSfw94boAOF-40Tqs7w3i7JZHx1Bf7QOnF9O5CCBvlr7193_qA/viewform', external: true,
+      map: function (p) { var sv = p.role === 'SV'; return { 1088352602: sv ? p.gvhd : p.name, 51999249: sv ? p.lop : '', 1197238647: dev(p) }; } },
+    { id: 4, dev: '1229356360', title: 'Mượn – trả chìa khóa tại phòng Bảo vệ',
+      url: F + '1FAIpQLSfzPMKbw7NzO9JQd8cIw5nGVUUUab4q6HC3Hf9OpOe80f3KkQ/viewform',
+      map: function (p) { return { 2058006377: p.name, 1754093913: p.phone, 1229356360: dev(p) }; } },
+    { id: 5, dev: '36146742', title: 'Nhật ký sử dụng phòng, thiết bị',
+      url: F + '1FAIpQLSeOjIKqgQ1QW3SGLmpMg914Cj35gnMvNAlwooggrGmEGanKlw/viewform',
+      map: function (p) {
+        var sv = p.role === 'SV';
+        return { 1785827683: p.name, 721939080: sv ? p.code : '', 1359450668: sv ? p.gvhd : '', 1010782295: p.phone,
+                 1253708338: sv ? p.lop : (p.role === 'GV' ? 'Giảng viên' : 'Nhân viên'), 36146742: dev(p) };
+      } },
+    { id: 6, dev: '1207168216', title: 'Đăng ký sử dụng tủ',
+      url: F + '1FAIpQLSdGfiKrHXjdBz37XovQvGepKJxYKc3CmJ-0TdTMFNoIK0HkRw/viewform',
+      map: function (p) { return { 1128092047: p.name, 1876463816: p.phone, 1207168216: dev(p) }; } },
+    { id: 7, dev: '1341386518', title: 'Đăng ký phòng, thiết bị làm KLTN',
+      url: F + '1FAIpQLSeVzsL67A8x7WNoFT8SPklLkQJJvMoS9RCtXiWiKCdv3mnjwQ/viewform',
+      map: function (p) { return { 1014304650: p.lop, 872918728: p.gvhd, 1000779252: p.name, 1516566812: p.code, 312818154: p.phone, 1341386518: dev(p) }; } }
+  ];
+
+  /* ===== Lưu trữ an toàn ===== */
+  var KP = 'ptn.profile.v1', KD = 'ptn.device.v1';
+  function load(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+  function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  var mem = {};
+
+  function deviceId() {
+    var d = load(KD) || mem.dev;
+    if (!d) {
+      var abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', s = '', arr = new Uint8Array(6);
+      (window.crypto || window.msCrypto).getRandomValues(arr);
+      for (var i = 0; i < 6; i++) s += abc[arr[i] % abc.length];
+      d = 'TB-' + s; mem.dev = d; save(KD, d);
+    }
+    return d;
+  }
+  function dev(p) { return deviceId() + ' | ' + (p.name || '') + ' | ' + (p.code || ''); }
+  function profile() { return load(KP) || mem.profile || null; }
+
+  /* ===== Giao diện chính ===== */
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function initials(n) { var w = String(n || '').trim().split(/\s+/); return (w[w.length - 1] || '?').charAt(0).toUpperCase(); }
+  var ROLE = { SV: 'Sinh viên', GV: 'Giảng viên', NV: 'Nhân viên' };
+
+  function renderHome() {
+    var p = profile();
+    $('devId').textContent = $('devId2').textContent = deviceId();
+    if (p) {
+      $('avatar').textContent = initials(p.name);
+      $('meName').textContent = p.name;
+      $('meSub').textContent = [p.code, p.role === 'SV' ? p.lop : (p.unit || ROLE[p.role])].filter(Boolean).join(' · ');
+      $('editBtn').textContent = 'Sửa';
+    } else {
+      $('avatar').textContent = '?';
+      $('meName').textContent = 'Chưa có thông tin';
+      $('meSub').textContent = 'Nhập một lần để tự điền các biểu mẫu';
+      $('editBtn').textContent = 'Nhập';
+    }
+    $('grid').innerHTML = FORMS.map(function (f) {
+      return '<button type="button" class="qr" data-id="' + f.id + '"><span class="chip">QR' + f.id + '</span>' +
+        '<span class="t">' + esc(f.title) + '</span>' + (f.external ? '<span class="ext">Mở bằng trình duyệt (cần đăng nhập Google)</span>' : '') + '</button>';
+    }).join('');
+  }
+
+  /* ===== Hồ sơ ===== */
+  var role = 'SV';
+  function setRole(r) {
+    role = r;
+    [].forEach.call(document.querySelectorAll('.seg button'), function (b) { b.setAttribute('aria-pressed', b.dataset.role === r ? 'true' : 'false'); });
+    $('codeLbl').textContent = r === 'SV' ? 'MSSV' : (r === 'GV' ? 'MSGV' : 'Mã nhân viên');
+    $('f_code').placeholder = r === 'SV' ? 'VD: 24752481' : 'VD: 01234';
+    $('svOnly').hidden = r !== 'SV';
+    $('gvOnly').hidden = r === 'SV';
+  }
+  function openProfile(first) {
+    var p = profile() || {};
+    setRole(p.role || 'SV');
+    $('f_name').value = p.name || ''; $('f_code').value = p.code || ''; $('f_email').value = p.email || '';
+    $('f_phone').value = p.phone || ''; $('f_lop').value = p.lop || ''; $('f_gvhd').value = p.gvhd || ''; $('f_unit').value = p.unit || '';
+    $('pfCancel').textContent = first ? 'Để sau' : 'Hủy';
+    [].forEach.call(document.querySelectorAll('.err'), function (e) { e.classList.remove('show'); });
+    $('profile').classList.add('show');
+    $('profile').scrollTop = 0;
+  }
+  function closeProfile() { $('profile').classList.remove('show'); }
+
+  function validate() {
+    var ok = true;
+    function bad(id, cond) { var e = document.querySelector('.err[data-for="' + id + '"]'); e.classList.toggle('show', cond); if (cond) ok = false; }
+    var name = $('f_name').value.trim().replace(/\s+/g, ' ');
+    var phone = $('f_phone').value.replace(/[\s.\-]/g, '');
+    bad('f_name', name.length < 3);
+    bad('f_code', $('f_code').value.trim().length < 3);
+    bad('f_email', !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($('f_email').value.trim()));
+    bad('f_phone', !/^0\d{9}$/.test(phone));
+    bad('f_lop', role === 'SV' && $('f_lop').value.trim().length < 2);
+    if (!ok) return null;
+    return { role: role, name: name, code: $('f_code').value.trim(), email: $('f_email').value.trim(), phone: phone,
+             lop: role === 'SV' ? $('f_lop').value.trim().toUpperCase() : '', gvhd: role === 'SV' ? $('f_gvhd').value.trim() : '',
+             unit: role !== 'SV' ? $('f_unit').value.trim() : '', saved: new Date().toISOString() };
+  }
+
+  /* ===== Mở biểu mẫu ===== */
+  function buildUrl(f, p, embedded) {
+    var q = ['usp=pp_url'], m = {};
+    if (p) m = f.map(p); else m[f.dev] = deviceId(); // chưa có hồ sơ: vẫn ghi mã máy
+    Object.keys(m).forEach(function (k) { if (m[k]) q.push('entry.' + k + '=' + encodeURIComponent(m[k])); });
+    if (p && f.email && p.email) q.push('emailAddress=' + encodeURIComponent(p.email));
+    if (embedded) q.push('embedded=true');
+    return f.url + '?' + q.join('&');
+  }
+  var current = null;
+  function openForm(id, skipCheck) {
+    var f = FORMS.filter(function (x) { return x.id === id; })[0]; if (!f) return;
+    var p = profile();
+    if (!p && !skipCheck) {
+      ask('Chưa có thông tin người đăng ký', 'Nhập thông tin một lần để app tự điền vào biểu mẫu. Bạn cũng có thể mở biểu mẫu và tự điền tay.',
+        'Nhập thông tin', function () { pendingForm = id; openProfile(true); }, 'Mở không tự điền', function () { openForm(id, true); });
+      return;
+    }
+    if (f.external) {
+      ask('QR' + f.id + ' mở bằng trình duyệt', 'Biểu mẫu này yêu cầu đăng nhập tài khoản Google để ghi email, nên sẽ mở trong trình duyệt. Thông tin của bạn vẫn được điền sẵn.',
+        'Mở biểu mẫu', function () { window.open(buildUrl(f, p, false), '_blank', 'noopener'); });
+      return;
+    }
+    current = f;
+    $('vTitle').innerHTML = '<span class="chip">QR' + f.id + '</span>' + esc(f.title);
+    $('vPrefill').textContent = p ? 'Đã điền sẵn thông tin của ' + p.name + '. Kiểm tra lại trước khi bấm Gửi.' : 'Chưa có thông tin cá nhân – vui lòng điền tay.';
+    $('vLoading').style.display = 'grid';
+    $('vFrame').src = buildUrl(f, p, true);
+    $('viewer').classList.add('show');
+    try { history.pushState({ v: f.id }, '', '#qr' + f.id); } catch (e) {}
+  }
+  function closeViewer(fromPop) {
+    if (!$('viewer').classList.contains('show')) return;
+    $('viewer').classList.remove('show');
+    $('vFrame').src = 'about:blank';
+    current = null;
+    if (!fromPop) { try { history.back(); } catch (e) {} }
+  }
+
+  /* ===== Hộp hỏi & thông báo ===== */
+  var okFn = null, cancelFn = null, pendingForm = null;
+  function ask(title, text, okLabel, onOk, cancelLabel, onCancel) {
+    $('mTitle').textContent = title; $('mText').textContent = text;
+    $('mOk').textContent = okLabel || 'Tiếp tục'; $('mCancel').textContent = cancelLabel || 'Đóng';
+    okFn = onOk; cancelFn = onCancel || null; $('modal').classList.add('show');
+  }
+  function closeModal() { $('modal').classList.remove('show'); }
+  var tt;
+  function toast(t) { var e = $('toast'); e.textContent = t; e.classList.add('show'); clearTimeout(tt); tt = setTimeout(function () { e.classList.remove('show'); }, 2600); }
+
+  /* ===== Cài app ===== */
+  var deferred = null;
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; if (!isStandalone) $('installCard').classList.add('show'); });
+  if (!isStandalone && isIOS) {
+    $('installText').innerHTML = 'Cài app: bấm nút <b>Chia sẻ</b> <span aria-hidden="true">⬆︎</span> của Safari → <b>Thêm vào MH chính</b>.';
+    $('installBtn').hidden = true;
+    $('installCard').classList.add('show');
+  }
+  $('installBtn').addEventListener('click', function () {
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.then(function (r) { if (r.outcome === 'accepted') $('installCard').classList.remove('show'); deferred = null; });
+  });
+
+  /* ===== Sự kiện ===== */
+  $('grid').addEventListener('click', function (e) { var b = e.target.closest('.qr'); if (b) openForm(+b.dataset.id); });
+  $('editBtn').addEventListener('click', function () { openProfile(!profile()); });
+  [].forEach.call(document.querySelectorAll('.seg button'), function (b) { b.addEventListener('click', function () { setRole(b.dataset.role); }); });
+  $('pfCancel').addEventListener('click', function () { closeProfile(); pendingForm = null; });
+  $('pf').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var p = validate(); if (!p) { toast('Vui lòng kiểm tra các ô báo đỏ'); return; }
+    if (!save(KP, p)) mem.profile = p;
+    closeProfile(); renderHome(); toast('Đã lưu thông tin');
+    if (pendingForm) { var id = pendingForm; pendingForm = null; openForm(id); }
+  });
+  $('vBack').addEventListener('click', function () { closeViewer(false); });
+  $('vReload').addEventListener('click', function () { if (current) { $('vLoading').style.display = 'grid'; $('vFrame').src = buildUrl(current, profile(), true); } });
+  $('vFrame').addEventListener('load', function () { $('vLoading').style.display = 'none'; });
+  window.addEventListener('popstate', function () { closeViewer(true); });
+  $('mOk').addEventListener('click', function () { closeModal(); var f = okFn; okFn = null; if (f) f(); });
+  $('mCancel').addEventListener('click', function () { closeModal(); var f = cancelFn; cancelFn = null; if (f) f(); });
+
+  /* ===== Khởi động ===== */
+  renderHome();
+  var qp = new URLSearchParams(location.search), want = parseInt(qp.get('qr') || '', 10);
+  if (!profile()) { pendingForm = want >= 1 && want <= 7 ? want : null; openProfile(true); }
+  else if (want >= 1 && want <= 7) openForm(want);
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "Cổng PTN F04.02 – Viện CNSH & Thực phẩm",
+  "short_name": "PTN F04.02",
+  "description": "Đăng ký nhanh QR1 – QR7 của Phòng thí nghiệm F04.02, Viện Công nghệ Sinh học và Thực phẩm, IUH.",
+  "lang": "vi",
+  "id": "./",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#253f93",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
