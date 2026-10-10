@@ -79,15 +79,22 @@
   /* màn hình form */
   .viewer{position:fixed;inset:0;background:#fff;z-index:40;display:none;flex-direction:column}
   .viewer.show{display:flex}
-  .bar{background:var(--navy);color:#fff;padding:calc(var(--top) + 6px) 8px 8px;display:flex;align-items:center;gap:6px}
+  .vbrand{background:#fff;padding:calc(var(--top) + 8px) 16px 8px;border-bottom:1px solid var(--line);flex:none}
+  .vbrand img{display:block;height:36px;width:auto;max-width:100%;margin:0 auto}
+  .bar{background:var(--navy);color:#fff;padding:6px 8px 8px;display:flex;align-items:center;gap:6px;flex:none}
   .bar button{background:transparent;border:0;color:#fff;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:none}
   .bar button:active{background:rgba(255,255,255,.15)}
-  .bar .ttl{flex:1;min-width:0;font-weight:600;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar .ttl{flex:1;min-width:0;font-weight:600;font-size:15px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
   .bar .chip{background:var(--gold);color:var(--navy);margin-right:8px;display:inline-block;vertical-align:middle;line-height:1.3}
   .prefill{background:#eef2ff;color:#2a3a7a;font-size:12.5px;padding:8px 14px;border-bottom:1px solid var(--line)}
   .frame{flex:1;position:relative}
-  .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
-  .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px;background:#fff}
+  .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;visibility:hidden;pointer-events:none}
+  .frame iframe.on{visibility:visible;pointer-events:auto}
+  .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px;background:#fff;z-index:2;text-align:center;padding:24px}
+  .loading b{display:block;color:var(--ink);font-size:15.5px;font-weight:600;margin-bottom:6px}
+  .loading small{display:block;font-size:12.5px;line-height:1.5;max-width:300px;margin:0 auto}
+  .loading .slow{display:none;margin-top:12px;color:var(--navy)}
+  .loading.slowed .slow{display:block}
   .spin{width:34px;height:34px;border-radius:50%;border:3px solid #dfe4f3;border-top-color:var(--navy);animation:sp 0.8s linear infinite;margin:0 auto 10px}
   @keyframes sp{to{transform:rotate(360deg)}}
   .toast{position:fixed;left:50%;bottom:calc(20px + var(--bottom));transform:translateX(-50%);background:#151b33;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
@@ -181,6 +188,7 @@
 
 <!-- Xem biểu mẫu trong app -->
 <section class="viewer" id="viewer" aria-modal="true" role="dialog" aria-labelledby="vTitle">
+  <header class="vbrand"><img src="logo-vien.jpg" alt="Đại học Công nghiệp TP. Hồ Chí Minh – Viện Công nghệ Sinh học và Thực phẩm"></header>
   <div class="bar">
     <button type="button" id="vBack" aria-label="Quay lại">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
@@ -192,8 +200,8 @@
   </div>
   <div class="prefill" id="vPrefill"></div>
   <div class="frame">
-    <div class="loading" id="vLoading"><div><div class="spin"></div>Đang mở biểu mẫu…</div></div>
-    <iframe id="vFrame" title="Biểu mẫu đăng ký" allow="clipboard-write"></iframe>
+    <div class="loading" id="vLoading"><div><div class="spin"></div><b>Vui lòng đợi, hệ thống đang tải dữ liệu…</b><small>Lần mở đầu tiên có thể mất 5–15 giây. Các lần mở sau sẽ nhanh hơn.</small><small class="slow">Mạng đang chậm. Bấm nút ⟳ ở góc phải để tải lại.</small></div></div>
+    <div id="vFrames"></div>
   </div>
 </section>
 
@@ -220,7 +228,7 @@
     { id: 1, dev: '1908592538', title: 'Mượn phòng, thiết bị – dụng cụ trong ngày',
       url: 'https://script.google.com/macros/s/AKfycbw7xr0ikGj-aafrPMUMieKKSso0yQz8GYF4487VThtqGvpZJySoAxgsXGOTIfQ6xHPL/exec', script: true,
       map: function (p) { return { 303998103: p.name, 1045781291: p.role === 'SV' ? p.gvhd : '', 1166974658: p.phone, 1908592538: dev(p) }; } },
-    { id: 2, dev: '442033899', title: 'Mượn thiết bị từ 02 ngày trở lên',
+    { id: 2, dev: '442033899', title: 'Mượn thiết bị từ 02 ngày trở lên (chỉ giải quyết cho giảng viên)', note: 'Chỉ giải quyết cho giảng viên.',
       url: 'https://script.google.com/macros/s/AKfycbyHs2ecT1wLdvH2IZXj1VMA0NLD5vnOoIgYOQl24sczwZwu5FzCbPzqm4xvlKnUpUw/exec', script: true,
       map: function (p) {
         var sv = p.role === 'SV';
@@ -345,7 +353,29 @@
     if (embedded) q.push('embedded=true');
     return f.url + '?' + q.join('&');
   }
-  var current = null;
+  var current = null, frames = {}, slowT = null;
+  function showLoading() {
+    var l = $('vLoading'); l.classList.remove('slowed'); l.style.display = 'grid';
+    clearTimeout(slowT); slowT = setTimeout(function () { l.classList.add('slowed'); }, 15000);
+  }
+  function hideLoading() { clearTimeout(slowT); $('vLoading').style.display = 'none'; }
+  function refresh(fr, visible) {
+    fr.loaded = false;
+    fr.el.src = fr.url + (fr.url.indexOf('?') >= 0 ? '&' : '?') + '_r=' + Date.now();
+    if (visible) showLoading();
+  }
+  // Mỗi biểu mẫu giữ một khung riêng: lần đầu tải, các lần sau mở ngay
+  function frameFor(f, p) {
+    var url = buildUrl(f, p, true), fr = frames[f.id];
+    if (fr && fr.url === url) return fr;
+    if (fr) fr.el.remove();
+    var el = document.createElement('iframe');
+    el.title = 'Biểu mẫu QR' + f.id; el.setAttribute('allow', 'clipboard-write');
+    fr = { el: el, url: url, loaded: false };
+    el.addEventListener('load', function () { fr.loaded = true; if (current && current.id === f.id) hideLoading(); });
+    el.src = url; $('vFrames').appendChild(el); frames[f.id] = fr;
+    return fr;
+  }
   function openForm(id, skipCheck) {
     var f = FORMS.filter(function (x) { return x.id === id; })[0]; if (!f) return;
     var p = profile();
@@ -361,17 +391,18 @@
     }
     current = f;
     $('vTitle').innerHTML = '<span class="chip">QR' + f.id + '</span>' + esc(f.title);
-    $('vPrefill').textContent = p ? 'Đã điền sẵn thông tin của ' + p.name + '. Kiểm tra lại trước khi bấm Gửi.' : 'Chưa có thông tin cá nhân – vui lòng điền tay.';
-    $('vLoading').style.display = 'grid';
-    $('vFrame').src = buildUrl(f, p, true);
+    $('vPrefill').textContent = (f.note ? f.note + ' ' : '') + (p ? 'Đã điền sẵn thông tin của ' + p.name + '. Kiểm tra lại trước khi bấm Gửi.' : 'Chưa có thông tin cá nhân – vui lòng điền tay.');
+    var fr = frameFor(f, p);
+    [].forEach.call($('vFrames').children, function (x) { x.classList.toggle('on', x === fr.el); });
+    if (fr.loaded) hideLoading(); else showLoading();
     $('viewer').classList.add('show');
     try { history.pushState({ v: f.id }, '', '#qr' + f.id); } catch (e) {}
   }
   function closeViewer(fromPop) {
     if (!$('viewer').classList.contains('show')) return;
     $('viewer').classList.remove('show');
-    $('vFrame').src = 'about:blank';
-    current = null;
+    if (current && frames[current.id]) refresh(frames[current.id], false); // tải sẵn bản mới cho lần mở sau
+    current = null; hideLoading();
     if (!fromPop) { try { history.back(); } catch (e) {} }
   }
 
@@ -415,8 +446,13 @@
     if (pendingForm) { var id = pendingForm; pendingForm = null; openForm(id); }
   });
   $('vBack').addEventListener('click', function () { closeViewer(false); });
-  $('vReload').addEventListener('click', function () { if (current) { $('vLoading').style.display = 'grid'; $('vFrame').src = buildUrl(current, profile(), true); } });
-  $('vFrame').addEventListener('load', function () { $('vLoading').style.display = 'none'; });
+  $('vReload').addEventListener('click', function () { if (current && frames[current.id]) refresh(frames[current.id], true); });
+  // Chạm vào thẻ QR là bắt đầu tải luôn (nhanh hơn một nhịp)
+  $('grid').addEventListener('pointerdown', function (e) {
+    var b = e.target.closest('.qr'); if (!b) return;
+    var f = FORMS.filter(function (x) { return x.id === +b.dataset.id; })[0], p = profile();
+    if (f && p && !f.external) frameFor(f, p);
+  });
   window.addEventListener('popstate', function () { closeViewer(true); });
   $('mOk').addEventListener('click', function () { closeModal(); var f = okFn; okFn = null; if (f) f(); });
   $('mCancel').addEventListener('click', function () { closeModal(); var f = cancelFn; cancelFn = null; if (f) f(); });
